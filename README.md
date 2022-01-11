@@ -1,3 +1,5 @@
+<div class="badge-base LI-profile-badge" data-locale="en_US" data-size="medium" data-theme="light" data-type="VERTICAL" data-vanity="davidjklein" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://uk.linkedin.com/in/davidjklein?trk=profile-badge">David Klein</a></div>
+              
 ![](https://github.com/soinkleined/github-stats/blob/master/generated/overview.svg)
 ![](https://github.com/soinkleined/github-stats/blob/master/generated/languages.svg)
 
