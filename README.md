@@ -1,3 +1,6 @@
+[![David's GitHub stats](https://github-readme-stats.vercel.app/api?username=soinkleined)](https://github.com/soinkleined/github-readme-stats)
+
+
 ![](https://github.com/soinkleined/github-stats/blob/master/generated/overview.svg)
 ![](https://github.com/soinkleined/github-stats/blob/master/generated/languages.svg)
 
