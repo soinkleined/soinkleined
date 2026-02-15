@@ -1,7 +1,3 @@
-[![David's GitHub stats](https://github-readme-stats.vercel.app/api?username=soinkleined)](https://github.com/soinkleined/)
-</br>
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=soinkleined)](https://github.com/soinkleined/)
-
 
 <!--
 **soinkleined/soinkleined** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
