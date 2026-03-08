@@ -1,3 +1,3 @@
 <p align="center">
-  ![Metrics](/github-metrics.svg)
+  <img src="/github-metrics.svg" alt="Metrics">
 </p>
