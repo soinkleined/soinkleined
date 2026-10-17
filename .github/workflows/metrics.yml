@@ -5,7 +5,7 @@ on:
   schedule: [{cron: "0 * * * *"}]
   # Lines below let you run workflow manually and on each commit
   workflow_dispatch:
-  push: {branches: ["master", "main", "cursor/publish-metrics-image-e585"]}
+  push: {branches: ["master", "main"]}
 # One run at a time. Leave an in-progress run alone: it commits an SVG
 # back to the repo, and a healthy run finishes well inside the job timeout.
 concurrency:
