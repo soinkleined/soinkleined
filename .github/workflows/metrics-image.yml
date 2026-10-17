@@ -1,0 +1,58 @@
+name: Publish metrics image
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      # Publish from the branch that introduces this workflow. main is the
+      # ongoing trigger; this extra branch does not match after it is deleted.
+      - cursor/publish-metrics-image-e585
+    paths:
+      - .github/workflows/metrics-image.yml
+      - .github/metrics/**
+concurrency:
+  group: metrics-image
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - id: pin
+        run: |
+          echo "sha=$(tr -d '[:space:]' < .github/metrics/source-ref)" >> "$GITHUB_OUTPUT"
+          echo "image=$(tr -d '[:space:]' < .github/metrics/image)" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          repository: soinkleined/metrics
+          ref: ${{ steps.pin.outputs.sha }}
+          path: metrics-src
+      - name: Use the patched Dockerfile
+        run: cp .github/metrics/Dockerfile metrics-src/Dockerfile
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: metrics-src
+          push: true
+          provenance: false
+          sbom: false
+          tags: ${{ steps.pin.outputs.image }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/soinkleined/soinkleined
+            org.opencontainers.image.revision=${{ steps.pin.outputs.sha }}
+      - name: Make the package public
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api --method PATCH /user/packages/container/metrics/visibility -f visibility=public \
+            || gh api --method PATCH "/repos/${GITHUB_REPOSITORY}/packages/container/metrics/visibility" -f visibility=public \
+            || echo "::warning::Could not change package visibility. Workflows in this repository can still pull the image with GITHUB_TOKEN."

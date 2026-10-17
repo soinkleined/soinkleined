@@ -17,8 +17,24 @@ jobs:
     timeout-minutes: 30
     permissions:
       contents: write
+      packages: read
     steps:
-      - uses: soinkleined/metrics@master
+      - uses: actions/checkout@v4
+      - id: pin
+        run: echo "sha=$(tr -d '[:space:]' < .github/metrics/source-ref)" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          repository: soinkleined/metrics
+          ref: ${{ steps.pin.outputs.sha }}
+          path: .metrics-action
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull the published image instead of building it
+        run: python3 .github/metrics/use-published-image.py .metrics-action/action.yml .github/metrics/image
+      - uses: ./.metrics-action
         with:
           # Your GitHub token
           # The following scopes are required:
