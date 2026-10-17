@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+      # This branch publishes the activity-plugin patch. It does not match after it is deleted.
+      - cursor/publish-metrics-image-e585
     paths:
       - .github/workflows/metrics-image.yml
       - .github/metrics/**
@@ -28,6 +30,8 @@ jobs:
           repository: soinkleined/metrics
           ref: ${{ steps.pin.outputs.sha }}
           path: metrics-src
+      - name: Skip activity events with a missing actor or user
+        run: git -C metrics-src apply "$GITHUB_WORKSPACE/.github/metrics/activity-null-users.patch"
       - name: Use the patched Dockerfile
         run: cp .github/metrics/Dockerfile metrics-src/Dockerfile
       - uses: docker/setup-buildx-action@v3
