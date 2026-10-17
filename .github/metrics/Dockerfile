@@ -35,6 +35,11 @@ RUN for cmd in systemctl journalctl systemd-sysusers systemd-tmpfiles; do \
   && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
   && apt-get update \
   && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 libx11-xcb1 libxtst6 lsb-release --no-install-recommends \
+  # Chrome pulls in systemd. Its later dpkg trigger runs journalctl --update-catalog,
+  # which blocks under BuildKit. Replace the real binaries before the next apt.
+  && for p in /bin/journalctl /usr/bin/journalctl /bin/systemctl /usr/bin/systemctl /bin/systemd-sysusers /usr/bin/systemd-sysusers /bin/systemd-tmpfiles /usr/bin/systemd-tmpfiles; do \
+       printf '#!/bin/sh\nexit 0\n' > "$p" && chmod +x "$p"; \
+     done \
   # Install deno for miscellaneous scripts
   && apt-get install -y curl unzip \
   && curl -fsSL https://deno.land/x/install/install.sh | DENO_INSTALL=/usr/local sh \
