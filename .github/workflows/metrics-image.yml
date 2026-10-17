@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-      # Publish from the branch that introduces this workflow. main is the
-      # ongoing trigger; this extra branch does not match after it is deleted.
-      - cursor/publish-metrics-image-e585
     paths:
       - .github/workflows/metrics-image.yml
       - .github/metrics/**
