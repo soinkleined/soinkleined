@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-      # This branch publishes the activity-plugin patch. It does not match after it is deleted.
-      - cursor/publish-metrics-image-e585
     paths:
       - .github/workflows/metrics-image.yml
       - .github/metrics/**
